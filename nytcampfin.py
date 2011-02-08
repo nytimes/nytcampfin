@@ -77,6 +77,27 @@ class FilingsClient(Client):
         result = self.fetch(path, cycle, parse=lambda r: r['results'])
         return result
 
+class CommitteesClient(Client):
+    
+    def get(self, cmte_id, cycle=CURRENT_CYCLE):
+        "Returns details for a single committee within a cycle"
+        path = "/%s/committees/%s"
+        result = self.fetch(path, cycle, cmte_id)
+        return result
+    
+    def filter(self, query, cycle=CURRENT_CYCLE):
+        "Returns a list of committees based on a search term"
+        path = "/%s/committees/search"
+        result = self.fetch(path, cycle, query=query, parse=lambda r: r['results'])
+        return result
+
+    def filings(self, cmte_id, cycle=CURRENT_CYCLE):
+        "Returns a list of a committee's filing within a cycle"
+        path = "/%s/committees/%s/filings"
+        result = self.fetch(path, cycle, cmte_id, parse=lambda r: r['results'])
+        return result
+        
+
 class NytCampfin(Client):
     """
     Implements the public interface for the NYT Campaign Finance API
@@ -101,4 +122,6 @@ class NytCampfin(Client):
     def __init__(self, apikey=os.environ.get('NYT_CAMPFIN_API_KEY'), cache='.cache'):
         super(NytCampfin, self).__init__(apikey, cache)
         self.filings = FilingsClient(self.apikey, cache)
+        self.committees = CommitteesClient(self.apikey, cache)
+        
 
