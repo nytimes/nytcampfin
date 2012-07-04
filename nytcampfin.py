@@ -20,6 +20,8 @@ DEBUG = False
 
 CURRENT_CYCLE = 2012
 
+API_KEY = os.environ['NYT_CAMPFIN_API_KEY']
+
 requests_cache.configure()
 
 # Error classes
@@ -40,8 +42,8 @@ class Client(object):
         
     BASE_URI = "http://api.nytimes.com/svc/elections/us/v3/finances"
     
-    def __init__(self, apikey, cache='.cache'):
-        self.apikey = "7fd07729db2293b8962c33ff80acbe57:9:9911"
+    def __init__(self, apikey=API_KEY):
+        self.apikey = apikey
     
     def fetch(self, path, *args, **kwargs):
         parse = kwargs.pop('parse', lambda r: r['results'][0])
@@ -80,13 +82,19 @@ class FilingsClient(Client):
 
 class CommitteesClient(Client):
     
+    def latest(self, cycle=CURRENT_CYCLE, offset=0):
+        "Returns newly registered committees"
+        path = "/%s/committees/new"
+        result = self.fetch(path, cycle, offset, parse=lambda r: r['results'])
+        return result
+    
     def get(self, cmte_id, cycle=CURRENT_CYCLE):
         "Returns details for a single committee within a cycle"
         path = "/%s/committees/%s"
         result = self.fetch(path, cycle, cmte_id)
         return result
     
-    def filter(self, query, cycle=CURRENT_CYCLE):
+    def filter(self, query, cycle=CURRENT_CYCLE, offset=0):
         "Returns a list of committees based on a search term"
         path = "/%s/committees/search"
         result = self.fetch(path, cycle, query=query, parse=lambda r: r['results'])
