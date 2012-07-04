@@ -5,9 +5,9 @@ __author__ = "Derek Willis (dwillis@gmail.com)"
 __version__ = "0.1.0"
 
 import datetime
-import httplib2
 import os
-import urllib
+import requests
+import requests_cache
 
 try:
     import json
@@ -19,6 +19,8 @@ __all__ = ('NytCampfin', 'NytCampfinError', 'NytNotFoundError')
 DEBUG = False
 
 CURRENT_CYCLE = 2012
+
+requests_cache.configure()
 
 # Error classes
 
@@ -35,33 +37,32 @@ class NytNotFoundError(NytCampfinError):
 # Clients
 
 class Client(object):
-    
+        
     BASE_URI = "http://api.nytimes.com/svc/elections/us/v3/finances"
     
     def __init__(self, apikey, cache='.cache'):
-        self.apikey = apikey
-        self.http = httplib2.Http(cache)
+        self.apikey = "7fd07729db2293b8962c33ff80acbe57:9:9911"
     
     def fetch(self, path, *args, **kwargs):
         parse = kwargs.pop('parse', lambda r: r['results'][0])
         kwargs['api-key'] = self.apikey
         
         if not path.lower().startswith(self.BASE_URI):
-            url = self.BASE_URI + "%s.json?" % path
-            url = (url % args) + urllib.urlencode(kwargs)
+            url = self.BASE_URI + "%s.json" % path
+            url = (url % args)
         else:
-            url = path + '?' + urllib.urlencode(kwargs)
+            url = path + '?'
         
-        resp, content = self.http.request(url)
-        if not resp.status in (200, 304):
-            content = json.loads(content)
+        resp = requests.get(url, params = dict(kwargs))
+        if not resp.status_code in (200, 304):
+            content = resp.json
             errors = '; '.join(e['error'] for e in content['errors'])
-            if resp.status == 404:
+            if resp.status_code == 404:
                 raise NytNotFoundError(errors)
             else:
                 raise NytCampfinError(errors)
         
-        result = json.loads(content)
+        result = resp.json
         
         if callable(parse):
             result = parse(result)
