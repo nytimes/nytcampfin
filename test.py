@@ -14,10 +14,10 @@ class APITest(unittest.TestCase):
     
     def check_response(self, result, url, parse=lambda r: r['results'][0]):
         
-        response = requests.get(url, params = dict(kwargs))
+        response = requests.get(url)
         
         if parse and callable(parse):
-            response = parse(response)
+            response = parse(response.json)
         
         self.assertEqual(result, response)
     
@@ -27,6 +27,9 @@ class APITest(unittest.TestCase):
 class FilingTest(APITest):
 
     def test_todays_filings(self):
-        today = self.finance.filing.today()
+        first = self.finance.filings.today()[0]
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/filings.json?api-key=%s" % API_KEY
-        self.check_response(today, url)
+        self.check_response(first, url)
+
+if __name__ == "__main__":
+    unittest.main()

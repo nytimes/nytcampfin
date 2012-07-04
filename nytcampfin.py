@@ -129,8 +129,8 @@ class NytCampfin(Client):
     """
 
     def __init__(self, apikey=os.environ.get('NYT_CAMPFIN_API_KEY'), cache='.cache'):
-        super(NytCampfin, self).__init__(apikey, cache)
-        self.filings = FilingsClient(self.apikey, cache)
-        self.committees = CommitteesClient(self.apikey, cache)
+        super(NytCampfin, self).__init__(apikey)
+        self.filings = FilingsClient(self.apikey)
+        self.committees = CommitteesClient(self.apikey)
         
 
