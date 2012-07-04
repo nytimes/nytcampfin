@@ -30,6 +30,11 @@ class FilingTest(APITest):
         first = self.finance.filings.today()[0]
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/filings.json?api-key=%s" % API_KEY
         self.check_response(first, url)
+        
+    def test_filings_for_date(self):
+        first = self.finance.filings.date(2012,07,04)[0]
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/filings/2012/07/04.json?api-key=%s" % API_KEY
+        self.check_response(first, url)
 
 if __name__ == "__main__":
     unittest.main()

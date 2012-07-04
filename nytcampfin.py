@@ -79,6 +79,12 @@ class FilingsClient(Client):
         path = "/%s/filings"
         result = self.fetch(path, cycle, parse=lambda r: r['results'])
         return result
+    
+    def date(self, year, month, day, cycle=CURRENT_CYCLE):
+        "Returns electronic filings for a given date"
+        path = "/%s/filings/%s/%s/%s"
+        result = self.fetch(path, cycle, year, month, day, parse=lambda r: r['results'])
+        return result
 
 class CommitteesClient(Client):
     
