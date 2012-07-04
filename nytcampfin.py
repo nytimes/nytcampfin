@@ -85,6 +85,12 @@ class FilingsClient(Client):
         path = "/%s/filings/%s/%s/%s"
         result = self.fetch(path, cycle, year, month, day, parse=lambda r: r['results'])
         return result
+    
+    def form_types(self, cycle=CURRENT_CYCLE):
+        "Returns an array of filing form types"
+        path = "/%s/filings/types"
+        result = self.fetch(path, cycle, parse=lambda r: r['results'])
+        return result
 
 class CommitteesClient(Client):
     
