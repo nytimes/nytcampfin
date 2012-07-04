@@ -16,7 +16,7 @@ Usage
 -----
 
     >>> from nytcampfin import NytCampfin
-    >>> finance = NytCampfin(API_KEY)
+    >>> finance = NytCampfin(YOUR_NYT_CAMPAIGN_FINANCE_API_KEY)
     
     # retrieve today's filings
     >>> today = finance.filings.today()
