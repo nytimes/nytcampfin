@@ -1,7 +1,7 @@
 NYT Campfin
 ==================
 
-A Python client for the New York Times [Campaign Finance API](http://developer.nytimes.com/docs/campaign_finance_api)
+A very basic Python client for the New York Times [Campaign Finance API](http://developer.nytimes.com/docs/campaign_finance_api). You'll need an API key, which should be set as an environment variable to run the tests.
 
 Install
 -------
