@@ -37,6 +37,12 @@ class FilingTest(APITest):
         form_types = self.finance.filings.form_types()
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/filings/types.json?api-key=%s" % API_KEY
         self.check_response(form_types, url)
+    
+    def test_amended_filings(self):
+        amendments = self.finance.filings.amendments()
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/filings/amendments.json?api-key=%s" % API_KEY
+        self.check_response(amendments, url)
+        
 
 if __name__ == "__main__":
     unittest.main()

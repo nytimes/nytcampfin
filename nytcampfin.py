@@ -91,6 +91,13 @@ class FilingsClient(Client):
         path = "/%s/filings/types"
         result = self.fetch(path, cycle, parse=lambda r: r['results'])
         return result
+    
+    def amendments(self, cycle=CURRENT_CYCLE):
+        "Returns an array of recent amendments"
+        path = "/%s/filings/amendments"
+        result = self.fetch(path, cycle, parse=lambda r: r['results'])
+        return result
+
 
 class CommitteesClient(Client):
     
