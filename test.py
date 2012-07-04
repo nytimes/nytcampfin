@@ -12,7 +12,7 @@ API_KEY = os.environ['NYT_CAMPFIN_API_KEY']
 
 class APITest(unittest.TestCase):
     
-    def check_response(self, result, url, parse=lambda r: r['results'][0]):
+    def check_response(self, result, url, parse=lambda r: r['results']):
         
         response = requests.get(url)
         
@@ -27,14 +27,14 @@ class APITest(unittest.TestCase):
 class FilingTest(APITest):
 
     def test_todays_filings(self):
-        first = self.finance.filings.today()[0]
+        today = self.finance.filings.today()
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/filings.json?api-key=%s" % API_KEY
-        self.check_response(first, url)
+        self.check_response(today, url)
         
     def test_filings_for_date(self):
-        first = self.finance.filings.date(2012,07,04)[0]
+        july4th = self.finance.filings.date(2012,07,04)
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/filings/2012/07/04.json?api-key=%s" % API_KEY
-        self.check_response(first, url)
+        self.check_response(july4th, url)
 
 if __name__ == "__main__":
     unittest.main()
