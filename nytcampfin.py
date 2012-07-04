@@ -122,10 +122,9 @@ class NytCampfin(Client):
     Create a new instance with your API key, or set an environment
     variable called NYT_CAMPFIN_API_KEY.
 
-    NytCampfin uses httplib2, and caching is pluggable. By default,
-    it uses httplib2.FileCache, in a directory called .cache, but it
-    should also work with memcache or anything else that exposes the
-    same interface as FileCache (per httplib2 docs).
+    NytCampfin uses requests and the requests-cache library. By default,
+    it uses a sqlite database named cache.sqlite, but other cache options
+    may be used.
     """
 
     def __init__(self, apikey=os.environ.get('NYT_CAMPFIN_API_KEY'), cache='.cache'):
