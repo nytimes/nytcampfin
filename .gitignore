@@ -4,3 +4,4 @@ bin/
 cache.sqlite
 include
 lib
+dist/
