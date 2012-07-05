@@ -22,7 +22,7 @@ CURRENT_CYCLE = 2012
 
 API_KEY = os.environ['NYT_CAMPFIN_API_KEY']
 
-requests_cache.configure()
+#requests_cache.configure()
 
 # Error classes
 
@@ -46,9 +46,11 @@ class Client(object):
         self.apikey = apikey
     
     def fetch(self, path, *args, **kwargs):
+        if not kwargs['offset']:
+            kwargs['offset'] = 0
         parse = kwargs.pop('parse', lambda r: r['results'][0])
         kwargs['api-key'] = self.apikey
-        
+
         if not path.lower().startswith(self.BASE_URI):
             url = self.BASE_URI + "%s.json" % path
             url = (url % args)
@@ -73,29 +75,35 @@ class Client(object):
         return result
 
 class FilingsClient(Client):
-
-    def today(self, cycle=CURRENT_CYCLE):
+    
+    def today(self, cycle=CURRENT_CYCLE, offset=0):
         "Returns today's FEC electronic filings"
         path = "/%s/filings"
-        result = self.fetch(path, cycle, parse=lambda r: r['results'])
+        result = self.fetch(path, cycle, offset=offset, parse=lambda r: r['results'])
         return result
     
-    def date(self, year, month, day, cycle=CURRENT_CYCLE):
+    def date(self, year, month, day, cycle=CURRENT_CYCLE, offset=0):
         "Returns electronic filings for a given date"
         path = "/%s/filings/%s/%s/%s"
-        result = self.fetch(path, cycle, year, month, day, parse=lambda r: r['results'])
+        result = self.fetch(path, cycle, year, month, day, offset=offset, parse=lambda r: r['results'])
         return result
     
-    def form_types(self, cycle=CURRENT_CYCLE):
+    def form_types(self, cycle=CURRENT_CYCLE, offset=0):
         "Returns an array of filing form types"
         path = "/%s/filings/types"
-        result = self.fetch(path, cycle, parse=lambda r: r['results'])
+        result = self.fetch(path, cycle, offset=offset, parse=lambda r: r['results'])
         return result
+        
+    def by_type(self, form_type, cycle=CURRENT_CYCLE, offset=0):
+        "Returns an array of electronic filings for a given form type"
+        path = "/%s/filings/types/%s"
+        result = self.fetch(path, cycle, form_type, offset=offset, parse=lambda r: r['results'])
+        return result        
     
-    def amendments(self, cycle=CURRENT_CYCLE):
+    def amendments(self, cycle=CURRENT_CYCLE, offset=0):
         "Returns an array of recent amendments"
         path = "/%s/filings/amendments"
-        result = self.fetch(path, cycle, parse=lambda r: r['results'])
+        result = self.fetch(path, cycle, offset=offset, parse=lambda r: r['results'])
         return result
 
 
@@ -104,25 +112,31 @@ class CommitteesClient(Client):
     def latest(self, cycle=CURRENT_CYCLE, offset=0):
         "Returns newly registered committees"
         path = "/%s/committees/new"
-        result = self.fetch(path, cycle, offset, parse=lambda r: r['results'])
+        result = self.fetch(path, cycle, offset=offset, parse=lambda r: r['results'])
         return result
     
-    def get(self, cmte_id, cycle=CURRENT_CYCLE):
+    def get(self, cmte_id, cycle=CURRENT_CYCLE, offset=0):
         "Returns details for a single committee within a cycle"
         path = "/%s/committees/%s"
-        result = self.fetch(path, cycle, cmte_id)
+        result = self.fetch(path, cycle, cmte_id, offset=offset)
         return result
     
     def filter(self, query, cycle=CURRENT_CYCLE, offset=0):
         "Returns a list of committees based on a search term"
         path = "/%s/committees/search"
-        result = self.fetch(path, cycle, query=query, parse=lambda r: r['results'])
+        result = self.fetch(path, cycle, query=query, offset=offset, parse=lambda r: r['results'])
         return result
 
-    def filings(self, cmte_id, cycle=CURRENT_CYCLE):
+    def filings(self, cmte_id, cycle=CURRENT_CYCLE, offset=0):
         "Returns a list of a committee's filing within a cycle"
         path = "/%s/committees/%s/filings"
-        result = self.fetch(path, cycle, cmte_id, parse=lambda r: r['results'])
+        result = self.fetch(path, cycle, cmte_id, offset=offset, parse=lambda r: r['results'])
+        return result
+
+    def contributions(self, cmte_id, cycle=CURRENT_CYCLE, offset=0):
+        "Returns a list of a committee's contributions within a cycle"
+        path = "/%s/committees/%s/contributions"
+        result = self.fetch(path, cycle, cmte_id, offset=offset, parse=lambda r: r['results'])
         return result
         
 
@@ -146,7 +160,7 @@ class NytCampfin(Client):
     may be used.
     """
 
-    def __init__(self, apikey=os.environ.get('NYT_CAMPFIN_API_KEY'), cache='.cache'):
+    def __init__(self, apikey=os.environ.get('NYT_CAMPFIN_API_KEY')):
         super(NytCampfin, self).__init__(apikey)
         self.filings = FilingsClient(self.apikey)
         self.committees = CommitteesClient(self.apikey)
