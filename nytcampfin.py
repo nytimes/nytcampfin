@@ -22,7 +22,7 @@ CURRENT_CYCLE = 2012
 
 API_KEY = os.environ['NYT_CAMPFIN_API_KEY']
 
-#requests_cache.configure()
+requests_cache.configure(expire_after=5)
 
 # Error classes
 
@@ -138,7 +138,12 @@ class CommitteesClient(Client):
         path = "/%s/committees/%s/contributions"
         result = self.fetch(path, cycle, cmte_id, offset=offset, parse=lambda r: r['results'])
         return result
-        
+
+    def contributions_to_candidate(self, cmte_id, candidate_id, cycle=CURRENT_CYCLE, offset=0):
+        "Returns a list of a committee's contributions to a given candidate within a cycle"
+        path = "/%s/committees/%s/contributions/candidates/%s"
+        result = self.fetch(path, cycle, cmte_id, candidate_id, offset=offset, parse=lambda r: r['results'])
+        return result        
 
 class NytCampfin(Client):
     """

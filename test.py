@@ -1,9 +1,13 @@
-import datetime
-import json
 import os
 import time
 import unittest
 import requests
+import requests_cache
+
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 from nytcampfin import NytCampfin, NytCampfinError, NytNotFoundError
 
@@ -13,10 +17,11 @@ API_KEY = os.environ['NYT_CAMPFIN_API_KEY']
 class APITest(unittest.TestCase):
     
     def check_response(self, result, url, parse=lambda r: r['results']):
-        response = requests.get(url)
-        if parse and callable(parse):
-            response = parse(response.json)
-        self.assertEqual(result, response)
+        with requests_cache.disabled(): # test requests should not be cached
+            response = requests.get(url)
+            if parse and callable(parse):
+                response = parse(response.json)
+            self.assertEqual(result, response)
     
     def setUp(self):
         self.finance = NytCampfin(API_KEY)
@@ -72,6 +77,12 @@ class CommitteeTest(APITest):
         contributions = self.finance.committees.contributions("C00381277")
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/committees/C00381277/contributions.json?api-key=%s" % API_KEY
         self.check_response(contributions, url)
+
+    def test_contributions_to_candidate(self):
+        contributions = self.finance.committees.contributions_to_candidate("C00007450", "H0PA12132")
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/committees/C00007450/contributions/candidates/H0PA12132.json?api-key=%s" % API_KEY
+        self.check_response(contributions, url)
+
     
     def test_filings(self):
         filings = self.finance.committees.filings("C00490045")
