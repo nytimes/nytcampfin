@@ -15,7 +15,7 @@ Or download and run
 Requirements
 ------------
 
-    Nytcampfin uses the [Kenneth Reitz's Requests library](https://github.com/kennethreitz/requests) for retrieving API endpoints and [Roman Haritonov's requests-cache library](https://github.com/reclosedev/requests-cache) for local caching. The cache is preconfigured to use a local sqlite database and set to expire after 5 minutes.
+Nytcampfin uses the [Kenneth Reitz's Requests library](https://github.com/kennethreitz/requests) for retrieving API endpoints and [Roman Haritonov's requests-cache library](https://github.com/reclosedev/requests-cache) for local caching. The cache is preconfigured to use a local sqlite database and set to expire after 5 minutes.
     
 Tests
 -----
