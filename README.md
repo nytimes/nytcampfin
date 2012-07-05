@@ -20,11 +20,11 @@ Nytcampfin uses the [Kenneth Reitz's Requests library](https://github.com/kennet
 Tests
 -----
 
-    To run the tests, do the following:
+To run the tests, do the following:
     
     $ python test.py
     
-    The use of caching is disabled in the tests.
+The use of caching is disabled in the tests.
 
 Usage
 -----
