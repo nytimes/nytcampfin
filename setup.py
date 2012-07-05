@@ -6,7 +6,7 @@ from distutils.core import setup
 README = open('README.md').read()
 
 setup(
-    name = "python-nytcampfin",
+    name = "nytcampfin",
     version = nytcampfin.__version__,
     description = "A Python client for the New York Times Campaign Finance API",
     long_description = README,
