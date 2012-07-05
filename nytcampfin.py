@@ -4,15 +4,10 @@ A Python client for the New York Times Campaign Finance API
 __author__ = "Derek Willis (dwillis@gmail.com)"
 __version__ = "0.1.0"
 
-import datetime
 import os
 import requests
 import requests_cache
 
-try:
-    import json
-except ImportError:
-    import simplejson as json
 
 __all__ = ('NytCampfin', 'NytCampfinError', 'NytNotFoundError')
 

@@ -1,13 +1,7 @@
 import os
-import time
 import unittest
 import requests
 import requests_cache
-
-try:
-    import json
-except ImportError:
-    import simplejson as json
 
 from nytcampfin import NytCampfin, NytCampfinError, NytNotFoundError
 
