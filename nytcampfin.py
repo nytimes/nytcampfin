@@ -2,12 +2,11 @@
 A Python client for the New York Times Campaign Finance API
 """
 __author__ = "Derek Willis (dwillis@gmail.com)"
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 import os
 import requests
 import requests_cache
-
 
 __all__ = ('NytCampfin', 'NytCampfinError', 'NytNotFoundError')
 
