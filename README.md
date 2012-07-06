@@ -41,5 +41,10 @@ Usage
     >>> cmte = finance.committees.get('C00490219',2012)
     >>> cmte['id']
     u'C00490219'
+    
+    # retrieve a candidate's details
+    >>> cand = finance.candidates.get('H4NY11138')
+    >>> cand['name']
+    u'CLARKE, YVETTE D'
 
     
