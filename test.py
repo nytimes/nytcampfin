@@ -47,7 +47,48 @@ class FilingTest(APITest):
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/filings/amendments.json?api-key=%s" % API_KEY
         self.check_response(amendments, url)
 
-class CommitteeTest(APITest):
+class CandidatesTest(APITest):
+    
+    def test_latest(self):
+        latest = self.finance.candidates.latest()
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/candidates/new.json?api-key=%s" % API_KEY
+        self.check_response(latest, url)
+    
+    def test_detail(self):
+        detail = self.finance.candidates.get("H4NY11138")
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/candidates/H4NY11138.json?api-key=%s" % API_KEY
+        response = requests.get(url)
+        parse=lambda r: r['results']
+        results = parse(response.json)[0]
+        self.assertEqual(detail['total_receipts'], results['total_receipts'])
+    
+    def test_filter(self):
+        wilson = self.finance.candidates.filter("Wilson")
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/candidates/search.json?api-key=%s&query=Wilson" % API_KEY
+        self.check_response(wilson, url)
+    
+    def test_leaders(self):
+        loans = self.finance.candidates.leaders("candidate-loan")
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/candidates/leaders/candidate-loan.json?api-key=%s" % API_KEY
+        self.check_response(loans, url)
+    
+    def test_candidates_for_state(self):
+        candidates = self.finance.candidates.seats('RI')
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/seats/RI.json?api-key=%s" % API_KEY
+        self.check_response(candidates, url)
+        
+    def test_candidates_for_state_and_chamber(self):
+        candidates = self.finance.candidates.seats('MD', 'senate')
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/seats/MD/senate.json?api-key=%s" % API_KEY
+        self.check_response(candidates, url)
+
+    def test_candidates_for_state_and_chamber_and_district(self):
+        candidates = self.finance.candidates.seats('MD', 'house', 6)
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/seats/MD/house/6.json?api-key=%s" % API_KEY
+        self.check_response(candidates, url)
+
+
+class CommitteesTest(APITest):
     
     def test_latest(self):
         latest = self.finance.committees.latest()
@@ -76,13 +117,16 @@ class CommitteeTest(APITest):
         contributions = self.finance.committees.contributions_to_candidate("C00007450", "H0PA12132")
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/committees/C00007450/contributions/candidates/H0PA12132.json?api-key=%s" % API_KEY
         self.check_response(contributions, url)
-
     
     def test_filings(self):
         filings = self.finance.committees.filings("C00490045")
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/committees/C00490045/filings.json?api-key=%s" % API_KEY
         self.check_response(filings, url)
         
+    def test_leadership(self):
+        leadership = self.finance.committees.leadership()
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/committees/leadership.json?api-key=%s" % API_KEY
+        self.check_response(leadership, url)
     
 
 if __name__ == "__main__":

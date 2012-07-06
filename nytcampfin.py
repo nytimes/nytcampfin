@@ -55,7 +55,7 @@ class Client(object):
         resp = requests.get(url, params = dict(kwargs))
         if not resp.status_code in (200, 304):
             content = resp.json
-            errors = '; '.join(e['error'] for e in content['errors'])
+            errors = '; '.join(e for e in content['errors'])
             if resp.status_code == 404:
                 raise NytNotFoundError(errors)
             else:
@@ -101,6 +101,44 @@ class FilingsClient(Client):
         result = self.fetch(path, cycle, offset=offset, parse=lambda r: r['results'])
         return result
 
+class CandidatesClient(Client):
+    
+    def latest(self, cycle=CURRENT_CYCLE, offset=0):
+        "Returns newly registered candidates"
+        path = "/%s/candidates/new"
+        result = self.fetch(path, cycle, offset=offset, parse=lambda r: r['results'])
+        return result
+        
+    def get(self, cand_id, cycle=CURRENT_CYCLE, offset=0):
+        "Returns details for a single candidate within a cycle"
+        path = "/%s/candidates/%s"
+        result = self.fetch(path, cycle, cand_id, offset=offset)
+        return result
+
+    def filter(self, query, cycle=CURRENT_CYCLE, offset=0):
+        "Returns a list of candidates based on a search term"
+        path = "/%s/candidates/search"
+        result = self.fetch(path, cycle, query=query, offset=offset, parse=lambda r: r['results'])
+        return result
+    
+    def leaders(self, category, cycle=CURRENT_CYCLE, offset=0):
+        "Returns a list of leading candidates in a given category"
+        path = "/%s/candidates/leaders/%s"
+        result = self.fetch(path, cycle, category, offset=offset, parse=lambda r: r['results'])
+        return result
+    
+    def seats(self, state, chamber=None, district=None, cycle=CURRENT_CYCLE, offset=0):
+        "Returns an array of candidates for seats in the specified state and optional chamber and district"
+        if district:
+            path = "/%s/seats/%s/%s/%s"
+            result = self.fetch(path, cycle, state, chamber, district, offset=offset, parse=lambda r: r['results'])
+        elif chamber:
+            path = "/%s/seats/%s/%s"
+            result = self.fetch(path, cycle, state, chamber, offset=offset, parse=lambda r: r['results'])
+        else:
+            path = "/%s/seats/%s"
+            result = self.fetch(path, cycle, state, offset=offset, parse=lambda r: r['results'])
+        return result
 
 class CommitteesClient(Client):
     
@@ -138,7 +176,13 @@ class CommitteesClient(Client):
         "Returns a list of a committee's contributions to a given candidate within a cycle"
         path = "/%s/committees/%s/contributions/candidates/%s"
         result = self.fetch(path, cycle, cmte_id, candidate_id, offset=offset, parse=lambda r: r['results'])
-        return result        
+        return result
+        
+    def leadership(self, cycle=CURRENT_CYCLE, offset=0):
+        "Returns a list of leadership committees"
+        path = "/%s/committees/leadership"
+        result = self.fetch(path, cycle, offset=offset, parse=lambda r: r['results'])
+        return result
 
 class NytCampfin(Client):
     """
@@ -164,5 +208,7 @@ class NytCampfin(Client):
         super(NytCampfin, self).__init__(apikey)
         self.filings = FilingsClient(self.apikey)
         self.committees = CommitteesClient(self.apikey)
+        self.candidates = CandidatesClient(self.apikey)
+        
         
 
