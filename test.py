@@ -127,7 +127,33 @@ class CommitteesTest(APITest):
         leadership = self.finance.committees.leadership()
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/committees/leadership.json?api-key=%s" % API_KEY
         self.check_response(leadership, url)
+
+class PresidentTest(APITest):
     
+    def test_candidates(self):
+        candidates = self.finance.president.candidates()
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/president/totals.json?api-key=%s" % API_KEY
+        self.check_response(candidates, url)
+        
+    def test_detail_using_id(self):
+        candidate = self.finance.president.detail("")
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/president/candidates/P.json?api-key=%s" % API_KEY
+        self.check_response(candidate, url)
+
+    def test_detail_using_name(self):
+        candidate = self.finance.president.detail("obama")
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/president/candidates/obama.json?api-key=%s" % API_KEY
+        self.check_response(candidate, url)
+    
+    def test_state_total(self):
+        state = self.finance.president.state("AZ")
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/president/states/AZ.json?api-key=%s" % API_KEY
+        self.check_response(state, url)
+    
+    def test_zip_total(self):
+        zipcode = self.finance.president.zipcode("33407")
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/president/zip/33407.json?api-key=%s" % API_KEY
+        self.check_response(zipcode, url)
 
 if __name__ == "__main__":
     unittest.main()

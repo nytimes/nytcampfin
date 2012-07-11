@@ -183,6 +183,24 @@ class CommitteesClient(Client):
         result = self.fetch(path, cycle, offset=offset, parse=lambda r: r['results'])
         return result
 
+class PresidentClient(Client):
+    
+    def candidates(self, cycle=CURRENT_CYCLE, offset=0):
+        "Returns a list of presidential candidates with top-level totals"
+        path = "/%s/president/totals"
+        result = self.fetch(path, cycle, offset=offset, parse=lambda r: r['results'])
+        return result
+    
+    def detail(self, candidate_id, cycle=CURRENT_CYCLE, offset=0):
+        "Returns financial details for a presidential candidate, using either FEC candidate ID or last name as a param"
+        path = "/%s/president/candidates/%s"
+        result = self.fetch(path, cycle, candidate_id, offset=offset)
+        return result
+    
+    
+
+        
+
 class NytCampfin(Client):
     """
     Implements the public interface for the NYT Campaign Finance API
@@ -208,6 +226,5 @@ class NytCampfin(Client):
         self.filings = FilingsClient(self.apikey)
         self.committees = CommitteesClient(self.apikey)
         self.candidates = CandidatesClient(self.apikey)
-        
-        
+        self.president = PresidentClient(self.apikey)
 
