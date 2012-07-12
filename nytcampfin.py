@@ -192,13 +192,22 @@ class PresidentClient(Client):
         return result
     
     def detail(self, candidate_id, cycle=CURRENT_CYCLE, offset=0):
-        "Returns financial details for a presidential candidate, using either FEC candidate ID or last name as a param"
+        "Returns financial details for a presidential candidate, using either FEC committee ID or last name as a param"
         path = "/%s/president/candidates/%s"
         result = self.fetch(path, cycle, candidate_id, offset=offset)
         return result
     
+    def state(self, state_abbrev, cycle=CURRENT_CYCLE, offset=0):
+        "Returns state totals for presidential candidates"
+        path = "/%s/president/states/%s"
+        result = self.fetch(path, cycle, state_abbrev, offset=offset)
+        return result
     
-
+    def zipcode(self, zipcode, cycle=CURRENT_CYCLE, offset=0):
+        "Returns zip code totals for presidential candidates"
+        path = "/%s/president/zips/%s"
+        result = self.fetch(path, cycle, zipcode, offset=offset)
+        return result
         
 
 class NytCampfin(Client):

@@ -58,9 +58,7 @@ class CandidatesTest(APITest):
         detail = self.finance.candidates.get("H4NY11138")
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/candidates/H4NY11138.json?api-key=%s" % API_KEY
         response = requests.get(url)
-        parse=lambda r: r['results']
-        results = parse(response.json)[0]
-        self.assertEqual(detail['total_receipts'], results['total_receipts'])
+        self.check_response(detail, url, parse=lambda r: r['results'][0])
     
     def test_filter(self):
         wilson = self.finance.candidates.filter("Wilson")
@@ -99,9 +97,7 @@ class CommitteesTest(APITest):
         detail = self.finance.committees.get("C00490045")
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/committees/C00490045.json?api-key=%s" % API_KEY
         response = requests.get(url)
-        parse=lambda r: r['results']
-        results = parse(response.json)[0]
-        self.assertEqual(detail['total_receipts'], results['total_receipts'])
+        self.check_response(detail, url, parse=lambda r: r['results'][0])
 
     def test_filter(self):
         hallmark = self.finance.committees.filter("Hallmark")
@@ -136,24 +132,24 @@ class PresidentTest(APITest):
         self.check_response(candidates, url)
         
     def test_detail_using_id(self):
-        candidate = self.finance.president.detail("")
-        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/president/candidates/P.json?api-key=%s" % API_KEY
-        self.check_response(candidate, url)
+        candidate = self.finance.president.detail("C00431445")
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/president/candidates/C00431445.json?api-key=%s" % API_KEY
+        self.check_response(candidate, url, parse=lambda r: r['results'][0])
 
     def test_detail_using_name(self):
         candidate = self.finance.president.detail("obama")
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/president/candidates/obama.json?api-key=%s" % API_KEY
-        self.check_response(candidate, url)
+        self.check_response(candidate, url, parse=lambda r: r['results'][0])
     
     def test_state_total(self):
         state = self.finance.president.state("AZ")
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/president/states/AZ.json?api-key=%s" % API_KEY
-        self.check_response(state, url)
+        self.check_response(state, url, parse=lambda r: r['results'][0])
     
     def test_zip_total(self):
         zipcode = self.finance.president.zipcode("33407")
-        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/president/zip/33407.json?api-key=%s" % API_KEY
-        self.check_response(zipcode, url)
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/president/zips/33407.json?api-key=%s" % API_KEY
+        self.check_response(zipcode, url, parse=lambda r: r['results'][0])
 
 if __name__ == "__main__":
     unittest.main()
