@@ -47,7 +47,24 @@ class FilingTest(APITest):
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/filings/amendments.json?api-key=%s" % API_KEY
         self.check_response(amendments, url)
 
-class CandidatesTest(APITest):
+class IndependentExpenditureTest(APITest):
+    
+    def test_latest(self):
+        latest = self.finance.indexp.latest()
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/independent_expenditures.json?api-key=%s" % API_KEY
+        self.check_response(latest, url)
+    
+    def test_ies_for_date(self):
+        july3rd = self.finance.indexp.date(2012,07,03)
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/independent_expenditures/2012/07/03.json?api-key=%s" % API_KEY
+        self.check_response(july3rd, url)
+
+    def test_committee_ies(self):
+        ies = self.finance.indexp.committee("C00490045")
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/committees/C00490045/independent_expenditures.json?api-key=%s" % API_KEY
+        self.check_response(ies, url)    
+
+class CandidateTest(APITest):
     
     def test_latest(self):
         latest = self.finance.candidates.latest()
@@ -86,7 +103,7 @@ class CandidatesTest(APITest):
         self.check_response(candidates, url)
 
 
-class CommitteesTest(APITest):
+class CommitteeTest(APITest):
     
     def test_latest(self):
         latest = self.finance.committees.latest()
@@ -150,6 +167,7 @@ class PresidentTest(APITest):
         zipcode = self.finance.president.zipcode("33407")
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/president/zips/33407.json?api-key=%s" % API_KEY
         self.check_response(zipcode, url, parse=lambda r: r['results'][0])
+    
 
 if __name__ == "__main__":
     unittest.main()

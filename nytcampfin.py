@@ -99,6 +99,26 @@ class FilingsClient(Client):
         path = "/%s/filings/amendments"
         result = self.fetch(path, cycle, offset=offset, parse=lambda r: r['results'])
         return result
+        
+class IndependentExpenditureClient(Client):
+    
+    def latest(self, cycle=CURRENT_CYCLE, offset=0):
+        "Returns latest received independent expenditures"
+        path = "/%s/independent_expenditures"
+        result = self.fetch(path, cycle, offset=offset, parse=lambda r: r['results'])
+        return result
+
+    def date(self, year, month, day, cycle=CURRENT_CYCLE, offset=0):
+        "Returns independent expenditures made on a given date"
+        path = "/%s/independent_expenditures/%s/%s/%s"
+        result = self.fetch(path, cycle, year, month, day, offset=offset, parse=lambda r: r['results'])
+        return result
+
+    def committee(self, cmte_id, cycle=CURRENT_CYCLE, offset=0):
+        "Returns a list of a committee's independent expenditures within a cycle"
+        path = "/%s/committees/%s/independent_expenditures"
+        result = self.fetch(path, cycle, cmte_id, offset=offset, parse=lambda r: r['results'])
+        return result
 
 class CandidatesClient(Client):
     
@@ -208,7 +228,7 @@ class PresidentClient(Client):
         path = "/%s/president/zips/%s"
         result = self.fetch(path, cycle, zipcode, offset=offset)
         return result
-        
+    
 
 class NytCampfin(Client):
     """
@@ -236,4 +256,5 @@ class NytCampfin(Client):
         self.committees = CommitteesClient(self.apikey)
         self.candidates = CandidatesClient(self.apikey)
         self.president = PresidentClient(self.apikey)
+        self.indexp = IndependentExpenditureClient(self.apikey)
 
