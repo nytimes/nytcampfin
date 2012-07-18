@@ -120,6 +120,18 @@ class IndependentExpenditureClient(Client):
         result = self.fetch(path, cycle, cmte_id, offset=offset, parse=lambda r: r['results'])
         return result
 
+    def candidate(self, cand_id, cycle=CURRENT_CYCLE, offset=0):
+        "Returns a list of independent expenditures about a candidate within a cycle"
+        path = "/%s/candidates/%s/independent_expenditures"
+        result = self.fetch(path, cycle, cand_id, offset=offset, parse=lambda r: r['results'])
+        return result
+
+    def president(self, cycle=CURRENT_CYCLE, offset=0):
+        "Returns a list of independent expenditures about presidential candidates within a cycle"
+        path = "/%s/president/independent_expenditures"
+        result = self.fetch(path, cycle, offset=offset, parse=lambda r: r['results'])
+        return result
+
 class CandidatesClient(Client):
     
     def latest(self, cycle=CURRENT_CYCLE, offset=0):
