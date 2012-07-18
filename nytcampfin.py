@@ -132,6 +132,12 @@ class IndependentExpenditureClient(Client):
         result = self.fetch(path, cycle, offset=offset, parse=lambda r: r['results'])
         return result
 
+    def superpacs(self, cycle=CURRENT_CYCLE, offset=0):
+        "Returns a list of independent expenditures about presidential candidates within a cycle"
+        path = "/%s/committees/superpacs"
+        result = self.fetch(path, cycle, offset=offset, parse=lambda r: r['results'])
+        return result
+
 class CandidatesClient(Client):
     
     def latest(self, cycle=CURRENT_CYCLE, offset=0):
