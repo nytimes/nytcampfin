@@ -117,7 +117,12 @@ class CandidateTest(APITest):
         candidates = self.finance.candidates.seats('MD', 'house', 6)
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/seats/MD/house/6.json?api-key=%s" % API_KEY
         self.check_response(candidates, url)
-
+        
+    def test_late_contributions(self):
+        late_contribs = self.finance.candidates.late_contributions("H0TN08246")
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/candidates/H0TN08246/48hour.json?api-key=%s" % API_KEY
+        self.check_response(late_contribs, url)
+    
 
 class CommitteeTest(APITest):
     
@@ -146,6 +151,11 @@ class CommitteeTest(APITest):
         contributions = self.finance.committees.contributions_to_candidate("C00007450", "H0PA12132")
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/committees/C00007450/contributions/candidates/H0PA12132.json?api-key=%s" % API_KEY
         self.check_response(contributions, url)
+        
+    def test_late_contributions(self):
+        late_contribs = self.finance.committees.late_contributions("C00466854")
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/committees/C00466854/48hour.json?api-key=%s" % API_KEY
+        self.check_response(late_contribs, url)
     
     def test_filings(self):
         filings = self.finance.committees.filings("C00490045")

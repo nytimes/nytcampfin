@@ -157,6 +157,12 @@ class CandidatesClient(Client):
         path = "/%s/candidates/search"
         result = self.fetch(path, cycle, query=query, offset=offset, parse=lambda r: r['results'])
         return result
+        
+    def late_contributions(self, cand_id, cycle=CURRENT_CYCLE, offset=0):
+        "Returns a list of 48-hour contributions to the given candidate"
+        path = "/%s/candidates/%s/48hour"
+        result = self.fetch(path, cycle, cand_id, offset=offset, parse=lambda r: r['results'])
+        return result
     
     def leaders(self, category, cycle=CURRENT_CYCLE, offset=0):
         "Returns a list of leading candidates in a given category"
@@ -195,6 +201,12 @@ class CommitteesClient(Client):
         "Returns a list of committees based on a search term"
         path = "/%s/committees/search"
         result = self.fetch(path, cycle, query=query, offset=offset, parse=lambda r: r['results'])
+        return result
+
+    def late_contributions(self, cmte_id, cycle=CURRENT_CYCLE, offset=0):
+        "Returns a list of 48-hour contributions to the given candidate committee"
+        path = "/%s/committees/%s/48hour"
+        result = self.fetch(path, cycle, cmte_id, offset=offset, parse=lambda r: r['results'])
         return result
 
     def filings(self, cmte_id, cycle=CURRENT_CYCLE, offset=0):
