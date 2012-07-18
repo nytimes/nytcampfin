@@ -215,6 +215,12 @@ class CommitteesClient(Client):
         result = self.fetch(path, cycle, cmte_id, candidate_id, offset=offset, parse=lambda r: r['results'])
         return result
         
+    def ie_totals(self, cmte_id, cycle=CURRENT_CYCLE, offset=0):
+        "Returns a list of races where the given committee has done independent expenditures"
+        path = "/%s/committees/%s/independent_expenditures/races"
+        result = self.fetch(path, cycle, cmte_id, offset=offset, parse=lambda r: r['results'])
+        return result
+        
     def leadership(self, cycle=CURRENT_CYCLE, offset=0):
         "Returns a list of leadership committees"
         path = "/%s/committees/leadership"
@@ -246,7 +252,7 @@ class PresidentClient(Client):
         path = "/%s/president/zips/%s"
         result = self.fetch(path, cycle, zipcode, offset=offset)
         return result
-    
+
 
 class NytCampfin(Client):
     """

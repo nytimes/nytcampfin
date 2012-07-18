@@ -151,7 +151,12 @@ class CommitteeTest(APITest):
         filings = self.finance.committees.filings("C00490045")
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/committees/C00490045/filings.json?api-key=%s" % API_KEY
         self.check_response(filings, url)
-        
+    
+    def test_ie_totals(self):
+        ie_totals = self.finance.committees.ie_totals("C00490045")
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/committees/C00490045/independent_expenditures/races.json?api-key=%s" % API_KEY
+        self.check_response(ie_totals, url)
+    
     def test_leadership(self):
         leadership = self.finance.committees.leadership()
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/committees/leadership.json?api-key=%s" % API_KEY
