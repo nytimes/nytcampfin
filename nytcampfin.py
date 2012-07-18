@@ -265,6 +265,20 @@ class PresidentClient(Client):
         result = self.fetch(path, cycle, zipcode, offset=offset)
         return result
 
+class LateContributionClient(Client):
+    
+    def latest(self, cycle=CURRENT_CYCLE, offset=0):
+        "Returns most recent 48-hour contributions"
+        path = "/%s/contributions/48hour"
+        result = self.fetch(path, cycle, offset=offset, parse=lambda r: r['results'])
+        return result
+    
+    def date(self, year, month, day, cycle=CURRENT_CYCLE, offset=0):
+        "Returns 48-hour contributions made on a given date"
+        path = "/%s/contributions/48hour/%s/%s/%s"
+        result = self.fetch(path, cycle, year, month, day, offset=offset, parse=lambda r: r['results'])
+        return result
+
 
 class NytCampfin(Client):
     """
@@ -293,4 +307,5 @@ class NytCampfin(Client):
         self.candidates = CandidatesClient(self.apikey)
         self.president = PresidentClient(self.apikey)
         self.indexp = IndependentExpenditureClient(self.apikey)
+        self.late_contribs = LateContributionClient(self.apikey)
 

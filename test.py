@@ -172,6 +172,18 @@ class CommitteeTest(APITest):
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/committees/leadership.json?api-key=%s" % API_KEY
         self.check_response(leadership, url)
 
+class LateContributionTest(APITest):
+    
+    def test_latest(self):
+        late_contribs = self.finance.late_contribs.latest()
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/contributions/48hour.json?api-key=%s" % API_KEY
+        self.check_response(late_contribs, url)
+        
+    def test_date(self):
+        late_contribs = self.finance.late_contribs.date(2012,3,23)
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/contributions/48hour/2012/3/23.json?api-key=%s" % API_KEY
+        self.check_response(late_contribs, url)
+
 class PresidentTest(APITest):
     
     def test_candidates(self):
