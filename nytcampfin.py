@@ -137,6 +137,12 @@ class IndependentExpenditureClient(Client):
         path = "/%s/committees/superpacs"
         result = self.fetch(path, cycle, offset=offset, parse=lambda r: r['results'])
         return result
+        
+    def race_totals(self, office, cycle=CURRENT_CYCLE, offset=0):
+        "Returns a list of races and the total amount of independent expenditures for the cycle"
+        path = "/%s/independent_expenditures/race_totals/%s"
+        result = self.fetch(path, cycle, office, offset=offset, parse=lambda r: r['results'])
+        return result
 
 class CandidatesClient(Client):
     

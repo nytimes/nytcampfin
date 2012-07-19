@@ -62,7 +62,12 @@ class IndependentExpenditureTest(APITest):
     def test_committee_ies(self):
         ies = self.finance.indexp.committee("C00490045")
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/committees/C00490045/independent_expenditures.json?api-key=%s" % API_KEY
-        self.check_response(ies, url)    
+        self.check_response(ies, url)
+        
+    def test_race_totals(self):
+        races = self.finance.indexp.race_totals("president")
+        url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/independent_expenditures/race_totals/president.json?api-key=%s" % API_KEY
+        self.check_response(races, url)
 
     def test_candidate_ies(self):
         ies = self.finance.indexp.candidate("P00003608")
