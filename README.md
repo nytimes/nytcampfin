@@ -49,18 +49,21 @@ Usage
     
 See the tests for plenty more examples.
 
-== Note on Patches/Pull Requests
+Note on Patches/Pull Requests
+-----------------------------
 
   * Fork the project.
   * Make your feature addition or bug fix.
   * Add tests for it.
   * Send a pull request. Bonus points for topic branches.
 
-== Authors
+Authors
+-------
 
   Derek Willis, dwillis@nytimes.com
 
-== Copyright
+Copyright
+---------
 
 Copyright (c) 2012 The New York Times Company. See LICENSE for details.
 
