@@ -1,7 +1,7 @@
 NYT Campfin
 ==================
 
-A very basic Python client for the New York Times [Campaign Finance API](http://developer.nytimes.com/docs/campaign_finance_api). You'll need an API key, which should be set as an environment variable to run the tests. The client returns JSON only, not full Python objects.
+A very basic Python client for the New York Times [Campaign Finance API](http://developer.nytimes.com/docs/campaign_finance_api). You'll need an API key, which should be set as an environment variable to run the tests. The client returns JSON only, not full Python objects, and attempts to implement each response in The Times' API.
 
 Install
 -------
@@ -15,7 +15,7 @@ Or download and run
 Requirements
 ------------
 
-Nytcampfin uses the [Kenneth Reitz's Requests library](https://github.com/kennethreitz/requests) for retrieving API endpoints and [Roman Haritonov's requests-cache library](https://github.com/reclosedev/requests-cache) for local caching. The cache is preconfigured to use a local sqlite database and set to expire after 5 minutes.
+NYT Campfin uses the [Kenneth Reitz's Requests library](https://github.com/kennethreitz/requests) for retrieving API endpoints and [Roman Haritonov's requests-cache library](https://github.com/reclosedev/requests-cache) for local caching. The cache is preconfigured to use a local sqlite database and set to expire after 5 minutes.
     
 Tests
 -----
@@ -46,5 +46,22 @@ Usage
     >>> cand = finance.candidates.get('H4NY11138')
     >>> cand['name']
     u'CLARKE, YVETTE D'
+    
+See the tests for plenty more examples.
+
+== Note on Patches/Pull Requests
+
+  * Fork the project.
+  * Make your feature addition or bug fix.
+  * Add tests for it.
+  * Send a pull request. Bonus points for topic branches.
+
+== Authors
+
+  Derek Willis, dwillis@nytimes.com
+
+== Copyright
+
+Copyright (c) 2012 The New York Times Company. See LICENSE for details.
 
     
