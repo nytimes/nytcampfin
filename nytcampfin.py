@@ -2,7 +2,7 @@
 A Python client for the New York Times Campaign Finance API
 """
 __author__ = "Derek Willis (dwillis@nytimes.com)"
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 import os
 import requests
