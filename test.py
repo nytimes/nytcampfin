@@ -6,7 +6,11 @@ import requests_cache
 from nytcampfin import NytCampfin, NytCampfinError, NytNotFoundError
 
 CURRENT_CYCLE = 2012
-API_KEY = os.environ['NYT_CAMPFIN_API_KEY']
+try:
+    API_KEY = os.environ['NYT_CAMPFIN_API_KEY']
+except:
+    print "Please set your API Key as an environment variable"
+    
 
 class APITest(unittest.TestCase):
     
@@ -209,12 +213,12 @@ class PresidentTest(APITest):
     def test_state_total(self):
         state = self.finance.president.state("AZ")
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/president/states/AZ.json?api-key=%s" % API_KEY
-        self.check_response(state, url, parse=lambda r: r['results'][0])
+        self.check_response(state, url)
     
     def test_zip_total(self):
         zipcode = self.finance.president.zipcode("33407")
         url = "http://api.nytimes.com/svc/elections/us/v3/finances/2012/president/zips/33407.json?api-key=%s" % API_KEY
-        self.check_response(zipcode, url, parse=lambda r: r['results'][0])
+        self.check_response(zipcode, url)
     
 
 if __name__ == "__main__":

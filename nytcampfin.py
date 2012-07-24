@@ -14,11 +14,6 @@ DEBUG = False
 
 CURRENT_CYCLE = 2012
 
-try:
-    API_KEY = os.environ['NYT_CAMPFIN_API_KEY']
-except:
-    print "Remember to set your NYT_CAMPFIN_API_KEY as an environment value"
-
 requests_cache.configure(expire_after=5)
 
 # Error classes
@@ -39,7 +34,7 @@ class Client(object):
         
     BASE_URI = "http://api.nytimes.com/svc/elections/us/v3/finances"
     
-    def __init__(self, apikey=API_KEY):
+    def __init__(self, apikey):
         self.apikey = apikey
     
     def fetch(self, path, *args, **kwargs):
@@ -265,13 +260,13 @@ class PresidentClient(Client):
     def state(self, state_abbrev, cycle=CURRENT_CYCLE, offset=0):
         "Returns state totals for presidential candidates"
         path = "/%s/president/states/%s"
-        result = self.fetch(path, cycle, state_abbrev, offset=offset)
+        result = self.fetch(path, cycle, state_abbrev, offset=offset, parse=lambda r: r['results'])
         return result
     
     def zipcode(self, zipcode, cycle=CURRENT_CYCLE, offset=0):
         "Returns zip code totals for presidential candidates"
         path = "/%s/president/zips/%s"
-        result = self.fetch(path, cycle, zipcode, offset=offset)
+        result = self.fetch(path, cycle, zipcode, offset=offset, parse=lambda r: r['results'])
         return result
 
 class LateContributionClient(Client):
@@ -302,14 +297,14 @@ class NytCampfin(Client):
     functions that add on your API key and trim fat off responses.
 
     Create a new instance with your API key, or set an environment
-    variable called NYT_CAMPFIN_API_KEY.
+    variable and pass that in.
 
     NytCampfin uses requests and the requests-cache library. By default,
     it uses a sqlite database named cache.sqlite, but other cache options
     may be used.
     """
-
-    def __init__(self, apikey=os.environ.get('NYT_CAMPFIN_API_KEY')):
+    
+    def __init__(self, apikey):
         super(NytCampfin, self).__init__(apikey)
         self.filings = FilingsClient(self.apikey)
         self.committees = CommitteesClient(self.apikey)
