@@ -14,7 +14,10 @@ DEBUG = False
 
 CURRENT_CYCLE = 2012
 
-API_KEY = os.environ['NYT_CAMPFIN_API_KEY']
+try:
+    API_KEY = os.environ['NYT_CAMPFIN_API_KEY']
+except:
+    print "Remember to set your NYT_CAMPFIN_API_KEY as an environment value"
 
 requests_cache.configure(expire_after=5)
 
@@ -22,7 +25,7 @@ requests_cache.configure(expire_after=5)
 
 class NytCampfinError(Exception):
     """
-    Exception for New York Times Congress API errors
+    Exception for New York Times Campaign Finance API errors
     """
 
 class NytNotFoundError(NytCampfinError):
