@@ -6,9 +6,6 @@ A very basic Python client for the New York Times [Campaign Finance API](http://
 Install
 -------
 
-Set your API key as an environment variable NYT_CAMPFIN_API_KEY:
-
-    $ export NYT_CAMPFIN_API_KEY=YOUR-API-KEY
     $ pip install nytcampfin
 
 Or download and run
@@ -23,7 +20,11 @@ NYT Campfin uses the [Kenneth Reitz's Requests library](https://github.com/kenne
 Tests
 -----
 
-To run the tests, do the following:
+To run the tests, set your API key as an environment variable NYT_CAMPFIN_API_KEY:
+
+    $ export NYT_CAMPFIN_API_KEY=YOUR-API-KEY
+
+and then run the tests:
     
     $ python test.py
     
