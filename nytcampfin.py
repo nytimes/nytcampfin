@@ -58,7 +58,7 @@ class Client(object):
             else:
                 raise NytCampfinError(errors)
         
-        result = resp.json
+        result = resp.json()
         
         if callable(parse):
             result = parse(result)
